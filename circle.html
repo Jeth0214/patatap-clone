@@ -9,7 +9,8 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/howler/1.1.28/howler.js"></script>
     <link rel="stylesheet" type="text/css" href="circle.css">
 
-    <script type="text/paperscript" canvas="myCanvas">
+	<script type="text/paperscript" canvas="myCanvas">
+		// event.key referrences
 		var keyData = {
 			q: {
 				sound: new Howl({
@@ -169,20 +170,31 @@
 			}
 		}
 
+		// an array in which our newCircle will push to 
+		//and to animate it and to be remove
 		var circles = [];
 
 		function onKeyDown(event) {
+			// check if a key entered is a property of keyData
 			if(keyData[event.key]){
+				//generate a random point in which our color will appear in the canvas
 				var maxPoint = new Point(view.size.width, view.size.height);
 				var randomPoint = Point.random();
 				var point = maxPoint * randomPoint;
-				var newCircle = new Path.Circle(point, 500)
+				var newCircle = new Path.Circle(point, 500);
+
+				//set the color of the newCircle according to the key keyData entered 
 				newCircle.fillColor = keyData[event.key].color;
+
+				//play the sound
 				keyData[event.key].sound.play();
+
+				// push the newCircle to circles array
 				circles.push(newCircle);
 			}
 		}
 
+		// animate the circle and after the circle shrink remove it from the circles array
 		function onFrame(event){
       for(var i = 0; i < circles.length; i++){
         circles[i].scale(0.9);
